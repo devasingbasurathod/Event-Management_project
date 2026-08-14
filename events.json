@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "title": "AI & Machine Learning",
+    "date": "2026-03-15",
+    "category": "workshops",
+    "location": "Lab 404 - Neural Hub",
+    "description": "Dive into neural networks, LLM integrations, and hands-on Python model training using state-of-the-art frameworks."
+  },
+  {
+    "id": 2,
+    "title": "Web Development",
+    "date": "2026-03-18",
+    "category": "workshops",
+    "location": "Lab 202 - Code Matrix",
+    "description": "Build high-performance web systems utilizing modern JavaScript frameworks, responsive Tailwind styling, and reactive architecture."
+  },
+  {
+    "id": 3,
+    "title": "Data Science",
+    "date": "2026-03-22",
+    "category": "workshops",
+    "location": "Auditorium B - Analytics Wing",
+    "description": "Master advanced data visualization, statistical analysis, and complex relational database querying pipelines."
+  },
+  {
+    "id": 4,
+    "title": "Cyber Security",
+    "date": "2026-03-25",
+    "category": "workshops",
+    "location": "SecOps Center - Room 01",
+    "description": "Learn penetration testing principles, ethical hacking techniques, and core strategies for hardening digital infrastructures."
+  },
+  {
+    "id": 5,
+    "title": "🎉 Parties & Celebrations",
+    "date": "2026-03-28",
+    "category": "social",
+    "location": "Main Open Air Arena",
+    "description": "Join the ultimate campus gala featuring neon lights, social networking mixers, food trucks, and lively music."
+  },
+  {
+    "id": 6,
+    "title": "🎵 Music & Concerts",
+    "date": "2026-03-29",
+    "category": "social",
+    "location": "Amphitheater Stage",
+    "description": "Experience live acoustic sessions, electronic DJ performances, and epic student band jams under the stars."
+  },
+  {
+    "id": 7,
+    "title": "🎭 Cultural Events",
+    "date": "2026-03-30",
+    "category": "social",
+    "location": "Grand Hall - Cultural Wing",
+    "description": "Celebrate diverse traditions with classical dance showcases, theatrical drama plays, and multi-ethnic art exhibitions."
+  }
+]

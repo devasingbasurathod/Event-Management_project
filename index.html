@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management System | Access Portal</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            dark: '#0a0b10',
+                            card: '#121520',
+                            accent: '#00f2fe',
+                            secondary: '#4facfe',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Inter:wght@300;400;500;600&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-tech {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .glow-effect {
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.2);
+        }
+
+        .glow-button:hover {
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
+        }
+
+        .guest-button:hover {
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.35);
+        }
+
+        .bg-grid {
+            background-image: radial-gradient(
+                rgba(255, 255, 255, 0.1) 1px,
+                transparent 1px
+            );
+            background-size: 24px 24px;
+        }
+
+        /* Light Theme Overrides */
+        body.light-theme {
+            background-color: #f8fafc !important;
+            color: #1e293b !important;
+            background-image: radial-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px) !important;
+        }
+        body.light-theme .bg-cyber-card {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+        body.light-theme .bg-cyber-dark {
+            background-color: #f1f5f9 !important;
+            color: #0f172a !important;
+        }
+        body.light-theme text-white,
+        body.light-theme h1, body.light-theme h2, body.light-theme h3 {
+            color: #0f172a !important;
+        }
+        body.light-theme .text-gray-400 {
+            color: #64748b !important;
+        }
+        body.light-theme .border-gray-800, body.light-theme .border-gray-700 {
+            border-color: #cbd5e1 !important;
+        }
+    </style>
+</head>
+
+<body class="bg-cyber-dark text-gray-100 min-h-screen bg-grid relative overflow-x-hidden transition-colors duration-300">
+
+    <!-- ========================================== -->
+    <!-- VIEW 1: LOGIN PORTAL                       -->
+    <!-- ========================================== -->
+    <div id="loginView" class="min-h-screen flex items-center justify-center p-4 relative">
+        <div class="absolute -top-32 -left-32 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="w-full max-w-md bg-cyber-card/85 backdrop-blur-xl border border-gray-800 rounded-2xl p-8 shadow-2xl glow-effect relative z-10">
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 text-white text-2xl shadow-lg mb-4">
+                    <i class="fa-solid fa-calendar-days"></i>
+                </div>
+                <h1 class="font-tech text-2xl font-bold tracking-wider text-white">
+                    Event Access
+                </h1>
+                <p class="text-xs text-gray-400 mt-2 uppercase tracking-widest">
+                    Event Management Intelligence
+                </p>
+            </div>
+
+            <form onsubmit="handleLogin(event)" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
+                        Operator ID / Email
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-500">
+                            <i class="fa-regular fa-envelope"></i>
+                        </span>
+                        <input type="email" id="loginEmail" required placeholder="user@eventportal.ai"
+                            class="w-full pl-11 pr-4 py-3 bg-cyber-dark/60 border border-gray-700 rounded-xl text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400">
+                            Access Key
+                        </label>
+                        <a href="#" class="text-xs text-cyan-400 hover:underline">Forgot Key?</a>
+                    </div>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-500">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <input type="password" id="loginPassword" required placeholder="••••••••••••"
+                            class="w-full pl-11 pr-4 py-3 bg-cyber-dark/60 border border-gray-700 rounded-xl text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all">
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full py-3.5 px-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-tech font-semibold text-sm rounded-xl glow-button transition-all duration-300 uppercase tracking-wider cursor-pointer">
+                    <i class="fa-solid fa-right-to-bracket mr-2"></i> Initialize Login
+                </button>
+            </form>
+
+            <div class="relative flex py-6 items-center">
+                <div class="flex-grow border-t border-gray-800"></div>
+                <span class="flex-shrink mx-4 text-gray-600 text-xs uppercase tracking-widest">or</span>
+                <div class="flex-grow border-t border-gray-800"></div>
+            </div>
+
+            <button type="button" onclick="guestLogin()"
+                class="guest-button w-full flex items-center justify-center py-3 px-4 bg-cyber-dark/50 border border-cyan-500/40 hover:border-cyan-400 rounded-xl text-sm font-medium text-cyan-300 transition-all duration-300 cursor-pointer">
+                <i class="fa-solid fa-user-secret mr-3 text-lg"></i>
+                <span>Continue as Guest</span>
+                <i class="fa-solid fa-arrow-right ml-auto"></i>
+            </button>
+        </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: EVENT DASHBOARD                    -->
+    <!-- ========================================== -->
+    <div id="dashboardView" class="hidden min-h-screen flex w-full relative overflow-x-hidden">
+
+        <!-- ================= SIDEBAR ================= -->
+        <aside id="sidebar" class="w-64 bg-cyber-card border-r border-gray-800 p-6 flex flex-col justify-between shrink-0 transition-all duration-300 z-30">
+            <div>
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="font-tech text-cyan-400 font-bold uppercase tracking-widest text-xs m-0">
+                        Categories
+                    </h2>
+                    <button onclick="toggleSidebar()" 
+                        class="w-9 h-9 rounded-full bg-cyber-dark border border-cyan-500/40 text-cyan-400 flex items-center justify-center hover:bg-cyan-500/20 hover:border-cyan-400 glow-button transition-all cursor-pointer shadow-md"
+                        title="Close Sidebar">
+                        <span class="text-base font-bold">☰</span>
+                    </button>
+                </div>
+
+                <nav class="space-y-2">
+                    <button id="nav-all" onclick="switchTab('all')"
+                        class="sidebar-btn w-full text-left p-3 rounded-xl transition text-gray-300 hover:bg-cyber-dark flex items-center gap-3 bg-cyber-dark/50 border border-cyan-500/30 text-cyan-300 cursor-pointer">
+                        <i class="fa-solid fa-border-all"></i>
+                        <span>All Events</span>
+                    </button>
+
+                    <button id="nav-games" onclick="switchTab('games')"
+                        class="sidebar-btn w-full text-left p-3 rounded-xl transition text-gray-300 hover:bg-cyber-dark flex items-center gap-3 cursor-pointer">
+                        <i class="fa-solid fa-gamepad"></i>
+                        <span>Games</span>
+                    </button>
+
+                    <button id="nav-workshops" onclick="switchTab('workshops')"
+                        class="sidebar-btn w-full text-left p-3 rounded-xl transition text-gray-300 hover:bg-cyber-dark flex items-center gap-3 cursor-pointer">
+                        <i class="fa-solid fa-microchip"></i>
+                        <span>Workshops</span>
+                    </button>
+
+                    <button id="nav-social" onclick="switchTab('social')"
+                        class="sidebar-btn w-full text-left p-3 rounded-xl transition text-gray-300 hover:bg-cyber-dark flex items-center gap-3 cursor-pointer">
+                        <i class="fa-solid fa-users"></i>
+                        <span>Social</span>
+                    </button>
+
+                    <button id="nav-settings" onclick="openSettingsModal()"
+                        class="sidebar-btn w-full text-left p-3 rounded-xl transition text-gray-300 hover:bg-cyber-dark flex items-center gap-3 cursor-pointer">
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Settings & Info</span>
+                    </button>
+                </nav>
+            </div>
+
+            <div class="pt-6 border-t border-gray-800">
+                <div class="mb-3 px-3 py-2 bg-cyber-dark/40 rounded-xl border border-gray-800">
+                    <p class="text-[10px] uppercase tracking-wider text-gray-500 font-tech">Logged in as:</p>
+                    <p id="userDisplayId" class="text-xs font-mono text-cyan-400 truncate">operator@portal.ai</p>
+                </div>
+                <button onclick="handleLogout()"
+                    class="w-full text-left p-3 rounded-xl transition text-red-400 hover:bg-red-500/10 flex items-center gap-3 cursor-pointer">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+
+        <!-- ================= MAIN CONTENT ================= -->
+        <main class="flex-1 p-8 md:p-12 overflow-y-auto">
+            <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-gray-800 pb-5 gap-4">
+                <div class="flex items-center gap-4">
+                    <button id="openSidebarBtn" onclick="toggleSidebar()" 
+                        class="hidden w-11 h-11 rounded-full bg-cyber-card border border-cyan-500/40 text-cyan-400 items-center justify-center hover:bg-cyan-500/10 hover:border-cyan-400 glow-button transition-all cursor-pointer shadow-lg"
+                        title="Open Menu">
+                        <span class="text-lg font-bold">☰</span>
+                    </button>
+
+                    <div>
+                        <p class="text-xs text-gray-400 uppercase tracking-widest">
+                            Event Management
+                        </p>
+                        <h1 id="pageTitle" class="font-tech text-3xl text-white font-bold tracking-wider mt-1">
+                            ALL EVENTS
+                        </h1>
+                    </div>
+                </div>
+
+                <button onclick="openAddModal()"
+                    class="bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-tech px-5 py-2.5 rounded-xl text-sm font-semibold glow-button transition-all cursor-pointer">
+                    <i class="fa-solid fa-plus mr-2"></i>
+                    Add Event
+                </button>
+            </header>
+
+            <!-- ================= EVENTS GRID ================= -->
+            <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- GAME 1: TIC-TAC-TOE -->
+                <div class="event-card bg-cyber-card border border-gray-800 hover:border-cyan-500/60 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg group"
+                    data-category="games"
+                    onclick="openTicTacToeModal()">
+                    <span class="inline-block text-[10px] font-tech uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-md mb-3 border border-cyan-500/20">
+                        Games
+                    </span>
+                    <h3 class="font-tech text-lg font-bold text-white group-hover:text-cyan-300 transition-colors mb-2">
+                        Cyber Tic-Tac-Toe
+                    </h3>
+                    <p class="text-gray-400 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-gamepad text-cyan-500 text-xs"></i>
+                        Play Quick Match
+                    </p>
+                </div>
+
+                <!-- GAME 2: EVENT TRIVIA -->
+                <div class="event-card bg-cyber-card border border-gray-800 hover:border-cyan-500/60 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg group"
+                    data-category="games"
+                    onclick="openTriviaModal()">
+                    <span class="inline-block text-[10px] font-tech uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-md mb-3 border border-cyan-500/20">
+                        Games
+                    </span>
+                    <h3 class="font-tech text-lg font-bold text-white group-hover:text-cyan-300 transition-colors mb-2">
+                        🎯 Event Trivia
+                    </h3>
+                    <p class="text-gray-400 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-circle-question text-cyan-500 text-xs"></i>
+                        Answer 10 Event Questions
+                    </p>
+                </div>
+
+                <!-- GAME 3: LUCKY EVENT WHEEL -->
+                <div class="event-card bg-cyber-card border border-gray-800 hover:border-cyan-500/60 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg group"
+                    data-category="games"
+                    onclick="openWheelModal()">
+                    <span class="inline-block text-[10px] font-tech uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-md mb-3 border border-cyan-500/20">
+                        Games
+                    </span>
+                    <h3 class="font-tech text-lg font-bold text-white group-hover:text-cyan-300 transition-colors mb-2">
+                        🎡 Lucky Event Wheel
+                    </h3>
+                    <p class="text-gray-400 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-dharmachakra text-cyan-500 text-xs"></i>
+                        Spin for Rewards & Tasks
+                    </p>
+                </div>
+
+                <!-- GAME 4: LEADERBOARD -->
+                <div class="event-card bg-cyber-card border border-gray-800 hover:border-cyan-500/60 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg group"
+                    data-category="games"
+                    onclick="openLeaderboardModal()">
+                    <span class="inline-block text-[10px] font-tech uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-md mb-3 border border-cyan-500/20">
+                        Games
+                    </span>
+                    <h3 class="font-tech text-lg font-bold text-white group-hover:text-cyan-300 transition-colors mb-2">
+                        🏆 Leaderboard
+                    </h3>
+                    <p class="text-gray-400 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-trophy text-cyan-500 text-xs"></i>
+                        Show Highest Scores
+                    </p>
+                </div>
+
+                <!-- WORKSHOP 1: AI & MACHINE LEARNING -->
+                <div class="event-card bg-cyber-card border border-gray-800 hover:border-cyan-500/60 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg group"
+                    data-category="workshops"
+                    onclick='showWorkshopDetails("🤖 AI & Machine Learning", "March 15, 2026", "Lab 404 - Neural Hub", "Dive into neural networks, LLM integrations, and hands-on Python model training using state-of-the-art frameworks.")'>
+                    <span class="inline-block text-[10px] font-tech uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-md mb-3 border border-cyan-500/20">
+                        Workshops
+                    </span>
+                    <h3 class="font-tech text-lg font-bold text-white group-hover:text-cyan-300 transition-colors mb-2">
+                        🤖 AI & Machine Learning
+                    </h3>
+                    <p class="text-gray-400 text-sm flex items-center gap-2">
+                        <i class="fa-regular fa-calendar text-cyan-500 text-xs"></i>
+                        March 15, 2026
+                    </p>
+                </div>
+
+                <!-- WORKSHOP 2: WEB DEVELOPMENT -->
+                <div class="event-card bg-cyber-card border border-gray-800 hover:border-cyan-500/60 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg group"
+                    data-category="workshops"
+                    onclick='showWorkshopDetails("💻 Web Development", "March 18, 2026", "Lab 202 - Code Matrix", "Build high-performance web systems utilizing modern JavaScript frameworks, responsive Tailwind styling, and reactive architecture.")'>
+                    <span class="inline-block text-[10px] font-tech uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-md mb-3 border border-cyan-500/20">
+                        Workshops
+                    </span>
+                    <h3 class="font-tech text-lg font-bold text-white group-hover:text-cyan-300 transition-colors mb-2">
+                        💻 Web Development
+                    </h3>
+                    <p class="text-gray-400 text-sm flex items-center gap-2">
+                        <i class="fa-regular fa-calendar text-cyan-500 text-xs"></i>
+                        March 18, 2026
+                    </p>
+                </div>
+
+                <!-- WORKSHOP 3: DATA SCIENCE -->
+                <div class="event-card bg-cyber-card border border-gray-800 hover:border-cyan-500/60 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg group"
+                    data-category="workshops"
+                    onclick='showWorkshopDetails("📊 Data Science", "March 22, 2026", "Auditorium B - Analytics Wing", "Master advanced data visualization, statistical analysis, and complex relational database querying pipelines.")'>
+                    <span class="inline-block text-[10px] font-tech uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-md mb-3 border border-cyan-500/20">
+                        Workshops
+                    </span>
+                    <h3 class="font-tech text-lg font-bold text-white group-hover:text-cyan-300 transition-colors mb-2">
+                        📊 Data Science
+                    </h3>
+                    <p class="text-gray-400 text-sm flex items-center gap-2">
+                        <i class="fa-regular fa-calendar text-cyan-500 text-xs"></i>
+                        March 22, 2026
+                    </p>
+                </div>
+
+                <!-- WORKSHOP 4: CYBER SECURITY -->
+                <div class="event-card bg-cyber-card border border-gray-800 hover:border-cyan-500/60 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg group"
+                    data-category="workshops"
+                    onclick='showWorkshopDetails("🔐 Cyber Security", "March 25, 2026", "SecOps Center - Room 01", "Learn penetration testing principles, ethical hacking techniques, and core strategies for hardening digital infrastructures.")'>
+                    <span class="inline-block text-[10px] font-tech uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-md mb-3 border border-cyan-500/20">
+                        Workshops
+                    </span>
+                    <h3 class="font-tech text-lg font-bold text-white group-hover:text-cyan-300 transition-colors mb-2">
+                        🔐 Cyber Security
+                    </h3>
+                    <p class="text-gray-400 text-sm flex items-center gap-2">
+                        <i class="fa-regular fa-calendar text-cyan-500 text-xs"></i>
+                        March 25, 2026
+                    </p>
+                </div>
+
+                <!-- SOCIAL EVENT 1: PARTIES & CELEBRATIONS -->
+                <div class="event-card bg-cyber-card border border-gray-800 hover:border-cyan-500/60 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg group"
+                    data-category="social"
+                    onclick='showWorkshopDetails("🎉 Parties & Celebrations", "March 28, 2026", "Main Open Air Arena", "Join the ultimate campus gala featuring neon lights, social networking mixers, food trucks, and lively music.")'>
+                    <span class="inline-block text-[10px] font-tech uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-md mb-3 border border-cyan-500/20">
+                        Social
+                    </span>
+                    <h3 class="font-tech text-lg font-bold text-white group-hover:text-cyan-300 transition-colors mb-2">
+                        🎉 Parties & Celebrations
+                    </h3>
+                    <p class="text-gray-400 text-sm flex items-center gap-2">
+                        <i class="fa-regular fa-calendar text-cyan-500 text-xs"></i>
+                        March 28, 2026
+                    </p>
+                </div>
+
+                <!-- SOCIAL EVENT 2: MUSIC & CONCERTS -->
+                <div class="event-card bg-cyber-card border border-gray-800 hover:border-cyan-500/60 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg group"
+                    data-category="social"
+                    onclick='showWorkshopDetails("🎵 Music & Concerts", "March 29, 2026", "Amphitheater Stage", "Experience live acoustic sessions, electronic DJ performances, and epic student band jams under the stars.")'>
+                    <span class="inline-block text-[10px] font-tech uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-md mb-3 border border-cyan-500/20">
+                        Social
+                    </span>
+                    <h3 class="font-tech text-lg font-bold text-white group-hover:text-cyan-300 transition-colors mb-2">
+                        🎵 Music & Concerts
+                    </h3>
+                    <p class="text-gray-400 text-sm flex items-center gap-2">
+                        <i class="fa-regular fa-calendar text-cyan-500 text-xs"></i>
+                        March 29, 2026
+                    </p>
+                </div>
+
+                <!-- SOCIAL EVENT 3: CULTURAL EVENTS -->
+                <div class="event-card bg-cyber-card border border-gray-800 hover:border-cyan-500/60 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1 shadow-lg group"
+                    data-category="social"
+                    onclick='showWorkshopDetails("🎭 Cultural Events", "March 30, 2026", "Grand Hall - Cultural Wing", "Celebrate diverse traditions with classical dance showcases, theatrical drama plays, and multi-ethnic art exhibitions.")'>
+                    <span class="inline-block text-[10px] font-tech uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-md mb-3 border border-cyan-500/20">
+                        Social
+                    </span>
+                    <h3 class="font-tech text-lg font-bold text-white group-hover:text-cyan-300 transition-colors mb-2">
+                        🎭 Cultural Events
+                    </h3>
+                    <p class="text-gray-400 text-sm flex items-center gap-2">
+                        <i class="fa-regular fa-calendar text-cyan-500 text-xs"></i>
+                        March 30, 2026
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- MODALS SECTION                             -->
+    <!-- ========================================== -->
+
+    <!-- Settings & App Info Modal -->
+    <div id="settingsModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-cyber-card border border-gray-800 rounded-2xl p-6 md:p-8 w-full max-w-lg relative shadow-2xl">
+            <button onclick="closeModals()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h2 class="font-tech text-xl font-bold text-white mb-4">⚙️ Settings & Web App Info</h2>
+            
+            <div class="space-y-6">
+                <!-- Account Section -->
+                <div class="p-4 bg-cyber-dark/60 rounded-xl border border-gray-800">
+                    <h3 class="text-xs uppercase tracking-wider text-cyan-400 font-tech font-semibold mb-2">Account Profile</h3>
+                    <p class="text-sm text-gray-300 mb-1">Current Identification ID:</p>
+                    <p id="modalUserIdentifier" class="text-sm font-mono text-white bg-cyber-dark px-3 py-2 rounded-lg border border-gray-700 select-all"></p>
+                </div>
+
+                <!-- Theme Toggle Section -->
+                <div class="p-4 bg-cyber-dark/60 rounded-xl border border-gray-800 flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xs uppercase tracking-wider text-cyan-400 font-tech font-semibold mb-1">Interface Appearance</h3>
+                        <p class="text-xs text-gray-400">Toggle between Cyber Dark mode and Light mode</p>
+                    </div>
+                    <button onclick="toggleTheme()" class="px-4 py-2 bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 rounded-xl text-xs font-semibold hover:border-cyan-400 cursor-pointer flex items-center gap-2">
+                        <i class="fa-solid fa-circle-half-stroke"></i>
+                        <span id="themeToggleText">Switch Theme</span>
+                    </button>
+                </div>
+
+                <!-- App Information Section -->
+                <div class="p-4 bg-cyber-dark/60 rounded-xl border border-gray-800">
+                    <h3 class="text-xs uppercase tracking-wider text-cyan-400 font-tech font-semibold mb-2">About Event Management Intelligence</h3>
+                    <p class="text-xs text-gray-300 leading-relaxed mb-3">
+                        This web application is an advanced interactive Event Management and Operations System tailored for technical campuses, workshops, hackathons, and interactive games. Built with a responsive modular dashboard, it supports custom dynamic event scheduling, minigames (Tic-Tac-Toe, Trivia, Lucky Wheel), and role-based operator tracking.
+                    </p>
+                    <div class="flex justify-between text-[11px] text-gray-400 border-t border-gray-800 pt-3 font-mono">
+                        <span>Version: 2.5.0-PRO</span>
+                        <span>Engine: Tailwind & Vanilla JS</span>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="closeModals()" class="w-full mt-6 py-2.5 bg-cyber-dark border border-gray-700 text-gray-300 rounded-xl text-xs font-semibold hover:border-cyan-400 cursor-pointer">
+                Close Settings
+            </button>
+        </div>
+    </div>
+
+    <!-- Event Details Modal -->
+    <div id="detailsModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-cyber-card border border-gray-800 rounded-2xl p-6 md:p-8 w-full max-w-lg relative shadow-2xl">
+            <button onclick="closeModals()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <span id="modalCategory" class="inline-block text-[10px] font-tech uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-md mb-3 border border-cyan-500/20"></span>
+            <h2 id="modalTitle" class="font-tech text-xl font-bold text-white mb-2"></h2>
+            <p id="modalDate" class="text-cyan-400 text-sm font-medium mb-1"></p>
+            <p id="modalLocation" class="text-gray-400 text-sm mb-4"></p>
+            <div class="border-t border-gray-800 my-4"></div>
+            <p id="modalDesc" class="text-gray-300 text-sm leading-relaxed mb-6"></p>
+            <button onclick="registerWorkshop()" id="registerBtn" class="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-tech font-semibold text-xs rounded-xl glow-button transition-all uppercase tracking-wider cursor-pointer">
+                Register For Session 🚀
+            </button>
+        </div>
+    </div>
+
+    <!-- Tic-Tac-Toe Modal -->
+    <div id="ticTacToeModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-cyber-card border border-gray-800 rounded-2xl p-6 md:p-8 w-full max-w-sm relative shadow-2xl text-center">
+            <button onclick="closeModals()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h2 class="font-tech text-xl font-bold text-white mb-2">Cyber Tic-Tac-Toe</h2>
+            <p id="tttStatus" class="text-cyan-400 text-sm mb-4">Player X's Turn</p>
+            
+            <div class="grid grid-cols-3 gap-2 mb-4">
+                <button onclick="makeMove(0)" class="ttt-cell h-20 bg-cyber-dark border border-gray-700 rounded-xl text-2xl font-tech font-bold text-white hover:border-cyan-400 cursor-pointer"></button>
+                <button onclick="makeMove(1)" class="ttt-cell h-20 bg-cyber-dark border border-gray-700 rounded-xl text-2xl font-tech font-bold text-white hover:border-cyan-400 cursor-pointer"></button>
+                <button onclick="makeMove(2)" class="ttt-cell h-20 bg-cyber-dark border border-gray-700 rounded-xl text-2xl font-tech font-bold text-white hover:border-cyan-400 cursor-pointer"></button>
+                <button onclick="makeMove(3)" class="ttt-cell h-20 bg-cyber-dark border border-gray-700 rounded-xl text-2xl font-tech font-bold text-white hover:border-cyan-400 cursor-pointer"></button>
+                <button onclick="makeMove(4)" class="ttt-cell h-20 bg-cyber-dark border border-gray-700 rounded-xl text-2xl font-tech font-bold text-white hover:border-cyan-400 cursor-pointer"></button>
+                <button onclick="makeMove(5)" class="ttt-cell h-20 bg-cyber-dark border border-gray-700 rounded-xl text-2xl font-tech font-bold text-white hover:border-cyan-400 cursor-pointer"></button>
+                <button onclick="makeMove(6)" class="ttt-cell h-20 bg-cyber-dark border border-gray-700 rounded-xl text-2xl font-tech font-bold text-white hover:border-cyan-400 cursor-pointer"></button>
+                <button onclick="makeMove(7)" class="ttt-cell h-20 bg-cyber-dark border border-gray-700 rounded-xl text-2xl font-tech font-bold text-white hover:border-cyan-400 cursor-pointer"></button>
+                <button onclick="makeMove(8)" class="ttt-cell h-20 bg-cyber-dark border border-gray-700 rounded-xl text-2xl font-tech font-bold text-white hover:border-cyan-400 cursor-pointer"></button>
+            </div>
+
+            <button onclick="resetTicTacToe()" class="px-4 py-2 bg-cyber-dark border border-cyan-500/40 text-cyan-300 rounded-xl text-xs font-semibold hover:border-cyan-400 cursor-pointer">
+                Restart Match
+            </button>
+        </div>
+    </div>
+
+    <!-- Event Trivia Modal -->
+    <div id="triviaModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-cyber-card border border-gray-800 rounded-2xl p-6 md:p-8 w-full max-w-md relative shadow-2xl">
+            <button onclick="closeModals()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="font-tech text-lg font-bold text-white">🎯 Event Trivia</h2>
+                <span id="triviaProgress" class="text-xs text-cyan-400 font-semibold">Question 1/10</span>
+            </div>
+            
+            <div id="triviaQuestionContainer">
+                <p id="triviaQuestionText" class="text-gray-200 text-sm mb-5 font-medium"></p>
+                <div id="triviaOptions" class="space-y-2.5 mb-5"></div>
+            </div>
+            <div id="triviaResultContainer" class="hidden text-center py-6">
+                <h3 class="font-tech text-2xl font-bold text-white mb-2">Trivia Complete! 🎉</h3>
+                <p id="triviaScoreText" class="text-cyan-400 text-base mb-6 font-semibold"></p>
+                <button onclick="startTrivia()" class="px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-tech text-xs font-semibold rounded-xl uppercase tracking-wider cursor-pointer">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lucky Event Wheel Modal -->
+    <div id="wheelModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-cyber-card border border-gray-800 rounded-2xl p-6 md:p-8 w-full max-w-sm relative shadow-2xl text-center">
+            <button onclick="closeModals()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h2 class="font-tech text-xl font-bold text-white mb-2">🎡 Lucky Event Wheel</h2>
+            <p class="text-gray-400 text-xs mb-6">Spin to unlock a random task or reward!</p>
+            
+            <div id="wheelDisplayBox" class="h-28 bg-cyber-dark border border-cyan-500/40 rounded-xl flex items-center justify-center p-4 mb-6 shadow-inner">
+                <p id="wheelResultText" class="font-tech text-sm text-cyan-300 font-bold">Ready to Spin?</p>
+            </div>
+
+            <button onclick="spinWheel()" id="spinWheelBtn" class="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-tech font-semibold text-xs rounded-xl glow-button transition-all uppercase tracking-wider cursor-pointer">
+                Spin the Wheel 🎡
+            </button>
+        </div>
+    </div>
+
+    <!-- Leaderboard Modal -->
+    <div id="leaderboardModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-cyber-card border border-gray-800 rounded-2xl p-6 md:p-8 w-full max-w-md relative shadow-2xl">
+            <button onclick="closeModals()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h2 class="font-tech text-xl font-bold text-white mb-1">🏆 Leaderboard</h2>
+            <p class="text-gray-400 text-xs mb-5">Top operators ranked by event challenge scores</p>
+            
+            <div class="space-y-3 mb-6">
+                <div class="flex items-center justify-between p-3.5 bg-cyber-dark/60 border border-cyan-500/30 rounded-xl">
+                    <div class="flex items-center gap-3">
+                        <span class="font-tech font-bold text-cyan-400 text-sm">#1</span>
+                        <span class="text-sm font-medium text-white">Operator_Alpha</span>
+                    </div>
+                    <span class="font-tech text-xs font-bold text-cyan-300 bg-cyan-500/10 px-2.5 py-1 rounded-md border border-cyan-500/20">980 PTS</span>
+                </div>
+                <div class="flex items-center justify-between p-3.5 bg-cyber-dark/60 border border-gray-800 rounded-xl">
+                    <div class="flex items-center gap-3">
+                        <span class="font-tech font-bold text-gray-400 text-sm">#2</span>
+                        <span class="text-sm font-medium text-white">CyberNinja</span>
+                    </div>
+                    <span class="font-tech text-xs font-bold text-gray-300 bg-gray-800 px-2.5 py-1 rounded-md">850 PTS</span>
+                </div>
+                <div class="flex items-center justify-between p-3.5 bg-cyber-dark/60 border border-gray-800 rounded-xl">
+                    <div class="flex items-center gap-3">
+                        <span class="font-tech font-bold text-gray-400 text-sm">#3</span>
+                        <span class="text-sm font-medium text-white">Guest_774</span>
+                    </div>
+                    <span class="font-tech text-xs font-bold text-gray-300 bg-gray-800 px-2.5 py-1 rounded-md">720 PTS</span>
+                </div>
+                <div class="flex items-center justify-between p-3.5 bg-cyber-dark/60 border border-gray-800 rounded-xl">
+                    <div class="flex items-center gap-3">
+                        <span class="font-tech font-bold text-gray-400 text-sm">#4</span>
+                        <span class="text-sm font-medium text-white">EventMaster</span>
+                    </div>
+                    <span class="font-tech text-xs font-bold text-gray-300 bg-gray-800 px-2.5 py-1 rounded-md">640 PTS</span>
+                </div>
+            </div>
+
+            <button onclick="closeModals()" class="w-full py-2.5 bg-cyber-dark border border-gray-700 text-gray-300 rounded-xl text-xs font-semibold hover:border-cyan-400 cursor-pointer">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- Add Event Modal -->
+    <div id="addModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-cyber-card border border-gray-800 rounded-2xl p-6 md:p-8 w-full max-w-lg relative shadow-2xl">
+            <button onclick="closeModals()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h2 class="font-tech text-xl font-bold text-white mb-5">Add New Event</h2>
+            
+            <form onsubmit="submitEvent(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Event Title</label>
+                    <input type="text" id="title" required class="w-full px-4 py-2.5 bg-cyber-dark border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-cyan-400">
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Date</label>
+                        <input type="date" id="date" required class="w-full px-4 py-2.5 bg-cyber-dark border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Category</label>
+                        <input type="text" id="category" placeholder="Games, Workshops, Social..." required class="w-full px-4 py-2.5 bg-cyber-dark border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-cyan-400">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Location</label>
+                    <input type="text" id="location" required class="w-full px-4 py-2.5 bg-cyber-dark border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-cyan-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Description</label>
+                    <textarea id="description" required rows="3" class="w-full px-4 py-2.5 bg-cyber-dark border border-gray-700 rounded-xl text-sm text-white focus:outline-none focus:border-cyan-400 resize-none"></textarea>
+                </div>
+                <button type="submit" class="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-tech font-semibold text-sm rounded-xl glow-button transition-all uppercase tracking-wider cursor-pointer">
+                    Save Event
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT LOGIC                           -->
+    <!-- ========================================== -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = localStorage.getItem("event_app_logged_in");
+            const savedTheme = localStorage.getItem("event_app_theme");
+            
+            if (savedTheme === "light") {
+                document.body.classList.add("light-theme");
+                document.getElementById('themeToggleText').innerText = "Cyber Dark Mode";
+            }
+
+            if (isLoggedIn === "true") {
+                showDashboard();
+                initializeUserIdentity();
+            }
+        });
+
+        function initializeUserIdentity() {
+            let userId = localStorage.getItem("event_app_user_id");
+            if (!userId) {
+                const isGuest = localStorage.getItem("event_app_is_guest") === "true";
+                if (isGuest) {
+                    const randomNum = Math.floor(1000 + Math.random() * 9000);
+                    userId = `Guest_Operator_${randomNum}`;
+                } else {
+                    userId = document.getElementById('loginEmail') ? document.getElementById('loginEmail').value : "operator@eventportal.ai";
+                }
+                localStorage.setItem("event_app_user_id", userId);
+            }
+            document.getElementById('userDisplayId').innerText = userId;
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            localStorage.setItem("event_app_logged_in", "true");
+            localStorage.setItem("event_app_is_guest", "false");
+            localStorage.setItem("event_app_user_id", email);
+            showDashboard();
+            initializeUserIdentity();
+        }
+
+        function guestLogin() {
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            const guestId = `Guest_Operator_${randomNum}`;
+            localStorage.setItem("event_app_logged_in", "true");
+            localStorage.setItem("event_app_is_guest", "true");
+            localStorage.setItem("event_app_user_id", guestId);
+            showDashboard();
+            initializeUserIdentity();
+        }
+
+        function handleLogout() {
+            localStorage.removeItem("event_app_logged_in");
+            localStorage.removeItem("event_app_user_id");
+            localStorage.removeItem("event_app_is_guest");
+            document.getElementById('dashboardView').classList.add('hidden');
+            document.getElementById('dashboardView').classList.remove('flex');
+            document.getElementById('loginView').classList.remove('hidden');
+        }
+
+        function showDashboard() {
+            document.getElementById('loginView').classList.add('hidden');
+            document.getElementById('dashboardView').classList.remove('hidden');
+            document.getElementById('dashboardView').classList.add('flex');
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const openBtn = document.getElementById('openSidebarBtn');
+            
+            sidebar.classList.toggle('hidden');
+            
+            if (sidebar.classList.contains('hidden')) {
+                openBtn.classList.remove('hidden');
+                openBtn.classList.add('flex');
+            } else {
+                openBtn.classList.remove('flex');
+                openBtn.classList.add('hidden');
+            }
+        }
+
+        function switchTab(categoryKey) {
+            document.querySelectorAll('.sidebar-btn').forEach(btn => {
+                btn.classList.remove('bg-cyber-dark/50', 'border', 'border-cyan-500/30', 'text-cyan-300');
+            });
+            const activeBtn = document.getElementById(`nav-${categoryKey}`);
+            if(activeBtn) {
+                activeBtn.classList.add('bg-cyber-dark/50', 'border', 'border-cyan-500/30', 'text-cyan-300');
+            }
+
+            const titleEl = document.getElementById('pageTitle');
+            const cards = document.querySelectorAll('.event-card');
+
+            if (categoryKey === 'all') {
+                titleEl.innerText = "ALL EVENTS";
+                cards.forEach(card => card.style.display = 'block');
+            } else if (categoryKey === 'games') {
+                titleEl.innerText = "GAMES & ACTIVITIES";
+                cards.forEach(card => {
+                    const cat = card.getAttribute('data-category');
+                    card.style.display = cat.includes('games') ? 'block' : 'none';
+                });
+            } else if (categoryKey === 'workshops') {
+                titleEl.innerText = "WORKSHOPS";
+                cards.forEach(card => {
+                    const cat = card.getAttribute('data-category');
+                    card.style.display = cat.includes('workshops') ? 'block' : 'none';
+                });
+            } else if (categoryKey === 'social') {
+                titleEl.innerText = "SOCIAL EVENTS";
+                cards.forEach(card => {
+                    const cat = card.getAttribute('data-category');
+                    card.style.display = cat.includes('social') ? 'block' : 'none';
+                });
+            }
+        }
+
+        // --- Settings Modal Logic ---
+        function openSettingsModal() {
+            closeModals();
+            const currentId = localStorage.getItem("event_app_user_id") || "Unknown Operator";
+            document.getElementById('modalUserIdentifier').innerText = currentId;
+            document.getElementById('settingsModal').classList.remove('hidden');
+            document.getElementById('settingsModal').classList.add('flex');
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            body.classList.toggle('light-theme');
+            const isLight = body.classList.contains('light-theme');
+            
+            if (isLight) {
+                localStorage.setItem("event_app_theme", "light");
+                document.getElementById('themeToggleText').innerText = "Cyber Dark Mode";
+            } else {
+                localStorage.setItem("event_app_theme", "dark");
+                document.getElementById('themeToggleText').innerText = "Switch Theme";
+            }
+        }
+
+        // --- Tic Tac Toe Game Logic ---
+        let tttBoard = ["", "", "", "", "", "", "", "", ""];
+        let tttTurn = "X";
+        let tttActive = true;
+
+        function openTicTacToeModal() {
+            closeModals();
+            document.getElementById('ticTacToeModal').classList.remove('hidden');
+            document.getElementById('ticTacToeModal').classList.add('flex');
+            resetTicTacToe();
+        }
+
+        function makeMove(index) {
+            if (tttBoard[index] === "" && tttActive) {
+                tttBoard[index] = tttTurn;
+                document.querySelectorAll('.ttt-cell')[index].innerText = tttTurn;
+                
+                checkWinCondition();
+                if (tttActive) {
+                    tttTurn = tttTurn === "X" ? "O" : "X";
+                    document.getElementById('tttStatus').innerText = `Player ${tttTurn}'s Turn`;
+                }
+            }
+        }
+
+        function checkWinCondition() {
+            const wins = [
+                [0,1,2], [3,4,5], [6,7,8],
+                [0,3,6], [1,4,7], [2,5,8],
+                [0,4,8], [2,4,6]
+            ];
+            let won = false;
+            for (let condition of wins) {
+                let [a, b, c] = condition;
+                if (tttBoard[a] && tttBoard[a] === tttBoard[b] && tttBoard[a] === tttBoard[c]) {
+                    won = true;
+                    break;
+                }
+            }
+            if (won) {
+                document.getElementById('tttStatus').innerText = `Player ${tttTurn} Wins! 🎉`;
+                tttActive = false;
+            } else if (!tttBoard.includes("")) {
+                document.getElementById('tttStatus').innerText = `It's a Draw! 🤝`;
+                tttActive = false;
+            }
+        }
+
+        function resetTicTacToe() {
+            tttBoard = ["", "", "", "", "", "", "", "", ""];
+            tttTurn = "X";
+            tttActive = true;
+            document.getElementById('tttStatus').innerText = "Player X's Turn";
+            document.querySelectorAll('.ttt-cell').forEach(cell => cell.innerText = "");
+        }
+
+        // --- Event Trivia Game Logic (10 Questions) ---
+        const triviaQuestions = [
+            { q: "What is the primary language used for structuring web pages?", options: ["HTML", "Python", "C++", "SQL"], answer: 0 },
+            { q: "Which tool is commonly used to style and layout web components?", options: ["Tailwind CSS", "Linux Kernel", "GCC Compiler", "PostgreSQL"], answer: 0 },
+            { q: "What year was modern JavaScript initially released?", options: ["1995", "2005", "2012", "1988"], answer: 0 },
+            { q: "In database design, what does SQL stand for?", options: ["Simple Query Language", "Structured Query Language", "System Quality Link", "Sequential Query Log"], answer: 1 },
+            { q: "Which logic gate outputs true only if all inputs are true?", options: ["OR Gate", "NOT Gate", "AND Gate", "XOR Gate"], answer: 2 },
+            { q: "Which data structure follows First-In-First-Out (FIFO)?", options: ["Stack", "Queue", "Tree", "Graph"], answer: 1 },
+            { q: "What HTTP status code represents a successful server response?", options: ["404", "500", "200", "301"], answer: 2 },
+            { q: "Which protocol is secure and encrypted for web traffic?", options: ["HTTP", "FTP", "HTTPS", "SMTP"], answer: 2 },
+            { q: "What does CSS stand for?", options: ["Computer Style Sheets", "Cascading Style Sheets", "Creative Style System", "Colorful Sheet Style"], answer: 1 },
+            { q: "Which command-line operation is used to copy files?", options: ["mv", "cp", "rm", "cat"], answer: 1 }
+        ];
+        let currentTriviaIndex = 0;
+        let triviaScore = 0;
+
+        function openTriviaModal() {
+            closeModals();
+            document.getElementById('triviaModal').classList.remove('hidden');
+            document.getElementById('triviaModal').classList.add('flex');
+            startTrivia();
+        }
+
+        function startTrivia() {
+            currentTriviaIndex = 0;
+            triviaScore = 0;
+            document.getElementById('triviaQuestionContainer').classList.remove('hidden');
+            document.getElementById('triviaResultContainer').classList.add('hidden');
+            loadTriviaQuestion();
+        }
+
+        function loadTriviaQuestion() {
+            if (currentTriviaIndex < triviaQuestions.length) {
+                const item = triviaQuestions[currentTriviaIndex];
+                document.getElementById('triviaProgress').innerText = `Question ${currentTriviaIndex + 1}/10`;
+                document.getElementById('triviaQuestionText').innerText = item.q;
+                
+                const optionsDiv = document.getElementById('triviaOptions');
+                optionsDiv.innerHTML = "";
+                item.options.forEach((opt, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = "w-full text-left p-3 bg-cyber-dark border border-gray-700 hover:border-cyan-400 rounded-xl text-xs font-medium text-gray-200 transition-all cursor-pointer";
+                    btn.innerText = opt;
+                    btn.onclick = () => handleTriviaAnswer(idx);
+                    optionsDiv.appendChild(btn);
+                });
+            } else {
+                document.getElementById('triviaQuestionContainer').classList.add('hidden');
+                document.getElementById('triviaResultContainer').classList.remove('hidden');
+                document.getElementById('triviaScoreText').innerText = `You scored ${triviaScore} out of 10 points!`;
+            }
+        }
+
+        function handleTriviaAnswer(selectedIndex) {
+            if (selectedIndex === triviaQuestions[currentTriviaIndex].answer) {
+                triviaScore++;
+            }
+            currentTriviaIndex++;
+            loadTriviaQuestion();
+        }
+
+        // --- Lucky Event Wheel Logic ---
+        const wheelOutcomes = [
+            "🎁 Reward: Free Event VIP Pass!",
+            "⚡ Task: Host a 5-min Lightning Tech Talk",
+            "🏆 Reward: +100 Bonus Leaderboard Points",
+            "🎯 Task: Help setup registration desk for 10 mins",
+            "🍕 Reward: Free Food & Beverage Voucher",
+            "🎤 Task: Introduce the next workshop speaker"
+        ];
+
+        function openWheelModal() {
+            closeModals();
+            document.getElementById('wheelModal').classList.remove('hidden');
+            document.getElementById('wheelModal').classList.add('flex');
+            document.getElementById('wheelResultText').innerText = "Ready to Spin?";
+        }
+
+        function spinWheel() {
+            const resultBox = document.getElementById('wheelResultText');
+            const spinBtn = document.getElementById('spinWheelBtn');
+            spinBtn.disabled = true;
+            resultBox.innerText = "Spinning wheel...";
+            
+            let counter = 0;
+            const interval = setInterval(() => {
+                const randomIndex = Math.floor(Math.random() * wheelOutcomes.length);
+                resultBox.innerText = wheelOutcomes[randomIndex];
+                counter++;
+                if (counter > 10) {
+                    clearInterval(interval);
+                    const finalOutcome = wheelOutcomes[Math.floor(Math.random() * wheelOutcomes.length)];
+                    resultBox.innerText = finalOutcome;
+                    spinBtn.disabled = false;
+                }
+            }, 100);
+        }
+
+        // --- Leaderboard Modal Logic ---
+        function openLeaderboardModal() {
+            closeModals();
+            document.getElementById('leaderboardModal').classList.remove('hidden');
+            document.getElementById('leaderboardModal').classList.add('flex');
+        }
+
+        const detailsModal = document.getElementById('detailsModal');
+        const addModal = document.getElementById('addModal');
+
+        function showDetails(event) {
+            document.getElementById('modalCategory').innerText = event.category;
+            document.getElementById('modalTitle').innerText = event.title;
+            document.getElementById('modalDate').innerText = `📅 ${event.date}`;
+            document.getElementById('modalLocation').innerText = `📍 ${event.location}`;
+            document.getElementById('modalDesc').innerText = event.description;
+            document.getElementById('registerBtn').innerText = "Register For Event 🚀";
+            detailsModal.classList.remove('hidden');
+            detailsModal.classList.add('flex');
+        }
+
+        function showWorkshopDetails(title, date, location, description) {
+            document.getElementById('modalCategory').innerText = "Social & Workshops";
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDate').innerText = `📅 ${date}`;
+            document.getElementById('modalLocation').innerText = `📍 ${location}`;
+            document.getElementById('modalDesc').innerText = description;
+            document.getElementById('registerBtn').innerText = "Register For Session 🚀";
+            detailsModal.classList.remove('hidden');
+            detailsModal.classList.add('flex');
+        }
+
+        function registerWorkshop() {
+            const btn = document.getElementById('registerBtn');
+            btn.innerText = "Successfully Registered! ✅";
+            btn.classList.remove('from-cyan-500', 'to-blue-600');
+            btn.classList.add('bg-emerald-600');
+            setTimeout(() => {
+                closeModals();
+                btn.classList.remove('bg-emerald-600');
+                btn.classList.add('from-cyan-500', 'to-blue-600');
+            }, 1500);
+        }
+
+        function openAddModal() {
+            addModal.classList.remove('hidden');
+            addModal.classList.add('flex');
+        }
+
+        function closeModals() {
+            detailsModal.classList.add('hidden');
+            detailsModal.classList.remove('flex');
+            document.getElementById('settingsModal').classList.add('hidden');
+            document.getElementById('settingsModal').classList.remove('flex');
+            document.getElementById('ticTacToeModal').classList.add('hidden');
+            document.getElementById('ticTacToeModal').classList.remove('flex');
+            document.getElementById('triviaModal').classList.add('hidden');
+            document.getElementById('triviaModal').classList.remove('flex');
+            document.getElementById('wheelModal').classList.add('hidden');
+            document.getElementById('wheelModal').classList.remove('flex');
+            document.getElementById('leaderboardModal').classList.add('hidden');
+            document.getElementById('leaderboardModal').classList.remove('flex');
+            addModal.classList.add('hidden');
+            addModal.classList.remove('flex');
+        }
+
+        async function submitEvent(e) {
+            e.preventDefault();
+            const payload = {
+                title: document.getElementById('title').value,
+                date: document.getElementById('date').value,
+                location: document.getElementById('location').value,
+                category: document.getElementById('category').value,
+                description: document.getElementById('description').value
+            };
+
+            const response = await fetch('/api/events', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                location.reload();
+            }
+        }
+
+        window.onclick = function(event) {
+            if (event.target === detailsModal) closeModals();
+            if (event.target === document.getElementById('settingsModal')) closeModals();
+            if (event.target === addModal) closeModals();
+            if (event.target === document.getElementById('ticTacToeModal')) closeModals();
+            if (event.target === document.getElementById('triviaModal')) closeModals();
+            if (event.target === document.getElementById('wheelModal')) closeModals();
+            if (event.target === document.getElementById('leaderboardModal')) closeModals();
+        }
+    </script>
+</body>
+</html>
